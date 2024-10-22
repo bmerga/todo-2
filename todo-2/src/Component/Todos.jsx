@@ -37,6 +37,20 @@ const addTodo = () => {
       setInputValue("")
   }
 }
+const startEditing = (id, title) => {
+setActiveId(id)
+setInputValue(title)
+}
+const saveTodo = () => {
+if (inputValue.trim() !=="") {
+  const newArray = todos.map((todo) => {
+    return activeId === todo.id ? {...todo, title: inputValue} : todo;
+     });
+     setTodos(newArray);
+     setActiveId(null)
+     setInputValue("")
+}
+};
 
   return (
     <div>
@@ -52,8 +66,8 @@ const addTodo = () => {
         type='text' 
         value={inputValue} 
         onChange={(e)=>setInputValue(e.target.value)}/>
-        <button className='reset-Button' onClick={addTodo}>
-          <Plus/>
+        <button className='reset-Button' onClick={activeId ? saveTodo: addTodo}>
+          {activeId? <Save/>: <Plus />}
         </button>
       </div>
       {todos.map((todo) => (
@@ -70,7 +84,11 @@ const addTodo = () => {
             <div>
             <button 
             className='reset-Button' 
-            onClick={()=>startEditing(todo.id, todo.title)}> <Edit style={{marginRight:"10px"}}/> </button>
+            onClick={()=>
+            startEditing(todo.id, todo.title)}> 
+            <Edit style={{
+              marginRight:"10px"}}/> 
+              </button>
             <button className='reset-Button' onClick={()=>handleDelete(todo.id)} > <Trash2 style={{color:"red"}}/> </button>
             </div>
           </div>
